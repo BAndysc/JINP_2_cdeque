@@ -1,4 +1,4 @@
-#ifdef STRDEQUECONST_H
+#ifndef STRDEQUECONST_H
 #define STRDEQUECONST_H
 
 #ifdef __cplusplus
