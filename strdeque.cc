@@ -6,11 +6,11 @@
 
 namespace
 {
-    const unsigned int EMPTY_STRDEQUE_ID = 0;
+	const unsigned int EMPTY_STRDEQUE_ID = 0;
 
 	typedef std::deque<std::string> Strdeque;
 
-    static Strdeque emptyStrdeque;
+	static Strdeque emptyStrdeque;
 
 	static std::unordered_map<unsigned long, Strdeque> strdeques({{0, emptyStrdeque}});
 
@@ -21,17 +21,17 @@ namespace
 		return strdeques.count(id) > 0;
 	}
 
-    Strdeque& strdeque_get_from_id_or_empty(unsigned long id)
-    {
-        if (strdeque_is_exist(id))
-        {
-            return strdeques[id];
-        }
-        else
-        {
-            return emptyStrdeque;
-        }
-    }
+	Strdeque& strdeque_get_from_id_or_empty(unsigned long id)
+	{
+		if (strdeque_is_exist(id))
+		{
+			return strdeques[id];
+		}
+		else
+		{
+			return emptyStrdeque;
+		}
+	}
 }
 
 namespace jnp1 
@@ -43,7 +43,7 @@ namespace jnp1
 		Strdeque newStrdeque;
 
 		lastAddedId++;
-        strdeques[lastAddedId] = newStrdeque;
+		strdeques[lastAddedId] = newStrdeque;
 
 		return lastAddedId;
 	}
@@ -75,14 +75,14 @@ namespace jnp1
 		{
 			Strdeque& strdeque = strdeques[id];
 
-            if (pos < strdeque.size())
-            {
-                strdeque.insert(strdeque.begin() + pos, value);
-            }
-            else
-            {
-                strdeque.push_back(value);
-            }
+			if (pos < strdeque.size())
+			{
+				strdeque.insert(strdeque.begin() + pos, value);
+			}
+			else
+			{
+				strdeque.push_back(value);
+			}
 		}
 	}
 
@@ -94,10 +94,10 @@ namespace jnp1
 		{
 			Strdeque& strdeque = strdeques.at(id);
 
-            if (pos < strdeque.size())
-            {
-                strdeque.erase(strdeque.begin() + pos);
-            }
+			if (pos < strdeque.size())
+			{
+				strdeque.erase(strdeque.begin() + pos);
+			}
 		}
 	}
 
@@ -107,12 +107,12 @@ namespace jnp1
 
 		if (strdeque_is_exist(id))
 		{
-            Strdeque& strdeque = strdeques[id];
+			Strdeque& strdeque = strdeques[id];
 
-            if (pos < strdeque.size())
-            {
-                return strdeque[pos].c_str();
-            }
+			if (pos < strdeque.size())
+			{
+				return strdeque[pos].c_str();
+			}
 		}
 
 		return nullptr;
@@ -122,43 +122,43 @@ namespace jnp1
 	{
 		std::cout << "DEBUG strdeque_clear("<<id<<")\n";
 
-        if (strdeque_is_exist(id))
-        {
-            Strdeque& strdeque = strdeques[id];
+		if (strdeque_is_exist(id))
+		{
+			Strdeque& strdeque = strdeques[id];
 
-            strdeque.clear();
-        }
+			strdeque.clear();
+		}
 	}
 
 	int strdeque_comp(unsigned long id1, unsigned long id2)
 	{
 		std::cout << "DEBUG strdeque_comp("<<id1<<", "<<id2<<")\n";
 
-        Strdeque& strdeque1 = strdeque_get_from_id_or_empty(id1);
-        Strdeque& strdeque2 = strdeque_get_from_id_or_empty(id2);
+		Strdeque& strdeque1 = strdeque_get_from_id_or_empty(id1);
+		Strdeque& strdeque2 = strdeque_get_from_id_or_empty(id2);
 
-        int compareResult = 0;
-        unsigned long lesserSize = strdeque1.size() < strdeque2.size() ? strdeque1.size() : strdeque2.size();
+		int compareResult = 0;
+		unsigned long lesserSize = strdeque1.size() < strdeque2.size() ? strdeque1.size() : strdeque2.size();
 
-        for (unsigned long i = 0; i < lesserSize && compareResult == 0; i++)
-        {
-            compareResult = strdeque1[i].compare(strdeque2[i]);
-        }
+		for (unsigned long i = 0; i < lesserSize && compareResult == 0; i++)
+		{
+			compareResult = strdeque1[i].compare(strdeque2[i]);
+		}
 
 		if (compareResult == 0 && strdeque1.size() != strdeque2.size())
-        {
-            compareResult = strdeque1.size() < strdeque2.size() ? -1 : 1;
-        }
-        else if (compareResult < -1)
-        {
-            compareResult = -1;
-        }
-        else if (compareResult > 1)
-        {
-            compareResult = 1;
-        }
+		{
+			compareResult = strdeque1.size() < strdeque2.size() ? -1 : 1;
+		}
+		else if (compareResult < -1)
+		{
+			compareResult = -1;
+		}
+		else if (compareResult > 1)
+		{
+			compareResult = 1;
+		}
 
-        return compareResult;
+		return compareResult;
 	}
 }
 
