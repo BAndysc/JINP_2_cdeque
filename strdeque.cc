@@ -6,11 +6,13 @@
 
 namespace
 {
-	const unsigned int EMPTY_STRDEQUE_ID = 0;
-	unsigned long lastAddedId = EMPTY_STRDEQUE_ID;
-
+	typedef unsigned long StrDequeMapKey;
 	typedef std::deque<std::string> Strdeque;
-	typedef std::unordered_map<unsigned long, Strdeque> StrDequeMap;
+	typedef std::unordered_map<StrDequeMapKey, Strdeque> StrDequeMap;
+
+	const StrDequeMapKey EMPTY_STRDEQUE_ID = 0;
+	StrDequeMapKey lastAddedId = EMPTY_STRDEQUE_ID;
+
 
 	Strdeque& get_empty_strdeque()
 	{
@@ -24,12 +26,12 @@ namespace
 		return str_deque_map;
 	}
 
-	bool strdeque_exists(unsigned long id)
+	bool strdeque_exists(StrDequeMapKey id)
 	{
 		return get_str_deque_map().count(id) > 0;
 	}
 
-	Strdeque& strdeque_get_from_id_or_empty(unsigned long id)
+	Strdeque& strdeque_get_from_id_or_empty(StrDequeMapKey id)
 	{
 		if (strdeque_exists(id))
 		{
@@ -44,7 +46,7 @@ namespace
 
 namespace jnp1
 {
-	unsigned long strdeque_new()
+	StrDequeMapKey strdeque_new()
 	{
 		std::cout << "DEBUG strdeque_new()\n";
 
@@ -53,14 +55,14 @@ namespace jnp1
 		return lastAddedId;
 	}
 
-	void strdeque_delete(unsigned long id)
+	void strdeque_delete(StrDequeMapKey id)
 	{
 		std::cout << "DEBUG strdeque_delete("<<id<<")\n";
 
 		get_str_deque_map().erase(id);
 	}
 
-	size_t strdeque_size(unsigned long id)
+	size_t strdeque_size(StrDequeMapKey id)
 	{
 		std::cout << "DEBUG strdeque_size("<<id<<")\n";
 
@@ -72,7 +74,7 @@ namespace jnp1
 		return 0;
 	}
 
-	void strdeque_insert_at(unsigned long id, size_t pos, const char* value)
+	void strdeque_insert_at(StrDequeMapKey id, size_t pos, const char* value)
 	{
 		std::cout << "DEBUG strdeque_insert_at("<<id<<", "<<pos<<", "<<value<<")\n";
 
@@ -91,7 +93,7 @@ namespace jnp1
 		}
 	}
 
-	void strdeque_remove_at(unsigned long id, size_t pos)
+	void strdeque_remove_at(StrDequeMapKey id, size_t pos)
 	{
 		std::cout << "DEBUG strdeque_remove_at("<<id<<", "<<pos<<")\n";
 
@@ -106,7 +108,7 @@ namespace jnp1
 		}
 	}
 
-	const char* strdeque_get_at(unsigned long id, size_t pos)
+	const char* strdeque_get_at(StrDequeMapKey id, size_t pos)
 	{
 		std::cout << "DEBUG strdeque_get_at("<<id<<", "<<pos<<")\n";
 
@@ -123,7 +125,7 @@ namespace jnp1
 		return nullptr;
 	}
 
-	void strdeque_clear(unsigned long id)
+	void strdeque_clear(StrDequeMapKey id)
 	{
 		std::cout << "DEBUG strdeque_clear("<<id<<")\n";
 
@@ -133,7 +135,7 @@ namespace jnp1
 		}
 	}
 
-	int strdeque_comp(unsigned long id1, unsigned long id2)
+	int strdeque_comp(StrDequeMapKey id1, StrDequeMapKey id2)
 	{
 		std::cout << "DEBUG strdeque_comp("<<id1<<", "<<id2<<")\n";
 
@@ -165,42 +167,42 @@ namespace jnp1
 	}
 }
 
-unsigned long strdeque_new()
+StrDequeMapKey strdeque_new()
 {
 	return jnp1::strdeque_new();
 }
 
-void strdeque_delete(unsigned long id)
+void strdeque_delete(StrDequeMapKey id)
 {
 	jnp1::strdeque_delete(id);
 }
 
-size_t strdeque_size(unsigned long id)
+size_t strdeque_size(StrDequeMapKey id)
 {
 	return jnp1::strdeque_size(id);
 }
 
-void strdeque_insert_at(unsigned long id, size_t pos, const char* value)
+void strdeque_insert_at(StrDequeMapKey id, size_t pos, const char* value)
 {
 	jnp1::strdeque_insert_at(id, pos, value);
 }
 
-void strdeque_remove_at(unsigned long id, size_t pos)
+void strdeque_remove_at(StrDequeMapKey id, size_t pos)
 {
 	jnp1::strdeque_remove_at(id, pos);
 }
 
-const char* strdeque_get_at(unsigned long id, size_t pos)
+const char* strdeque_get_at(StrDequeMapKey id, size_t pos)
 {
 	return jnp1::strdeque_get_at(id, pos);
 }
 
-void strdeque_clear(unsigned long id)
+void strdeque_clear(StrDequeMapKey id)
 {
 	jnp1::strdeque_clear(id);
 }
 
-int strdeque_comp(unsigned long id1, unsigned long id2)
+int strdeque_comp(StrDequeMapKey id1, StrDequeMapKey id2)
 {
 	return jnp1::strdeque_comp(id1, id2);
 }
