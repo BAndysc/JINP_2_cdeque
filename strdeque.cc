@@ -7,29 +7,37 @@
 namespace
 {
 	const unsigned int EMPTY_STRDEQUE_ID = 0;
+	unsigned long lastAddedId = EMPTY_STRDEQUE_ID;
 
 	typedef std::deque<std::string> Strdeque;
+	typedef std::unordered_map<unsigned long, Strdeque> StrDequeMap;
 
-	Strdeque emptyStrdeque;
+	Strdeque& get_empty_strdeque()
+	{
+		static Strdeque empty;
+		return empty;
+	}
 
-	std::unordered_map<unsigned long, Strdeque> strdeques({{0, emptyStrdeque}});
-
-	unsigned long lastAddedId = 0;
+	StrDequeMap& get_str_deque_map()
+	{
+		static StrDequeMap str_deque_map({{ EMPTY_STRDEQUE_ID, get_empty_strdeque() }});
+		return str_deque_map;
+	}
 
 	bool strdeque_exists(unsigned long id)
 	{
-		return strdeques.count(id) > 0;
+		return get_str_deque_map().count(id) > 0;
 	}
 
 	Strdeque& strdeque_get_from_id_or_empty(unsigned long id)
 	{
 		if (strdeque_exists(id))
 		{
-			return strdeques[id];
+			return get_str_deque_map()[id];
 		}
 		else
 		{
-			return emptyStrdeque;
+			return get_empty_strdeque();
 		}
 	}
 }
@@ -40,7 +48,7 @@ namespace jnp1
 	{
 		std::cout << "DEBUG strdeque_new()\n";
 
-		strdeques[++lastAddedId] = Strdeque();
+		get_str_deque_map()[++lastAddedId] = Strdeque();
 
 		return lastAddedId;
 	}
@@ -49,7 +57,7 @@ namespace jnp1
 	{
 		std::cout << "DEBUG strdeque_delete("<<id<<")\n";
 
-		strdeques.erase(id);
+		get_str_deque_map().erase(id);
 	}
 
 	size_t strdeque_size(unsigned long id)
@@ -58,7 +66,7 @@ namespace jnp1
 
 		if (strdeque_exists(id))
 		{
-			return strdeques[id].size();
+			return get_str_deque_map()[id].size();
 		}
 
 		return 0;
@@ -70,7 +78,7 @@ namespace jnp1
 
 		if (value != nullptr && strdeque_exists(id))
 		{
-			Strdeque& strdeque = strdeques[id];
+			Strdeque& strdeque = get_str_deque_map()[id];
 
 			if (pos < strdeque.size())
 			{
@@ -89,7 +97,7 @@ namespace jnp1
 
 		if (strdeque_exists(id))
 		{
-			Strdeque& strdeque = strdeques[id];
+			Strdeque& strdeque = get_str_deque_map()[id];
 
 			if (pos < strdeque.size())
 			{
@@ -104,7 +112,7 @@ namespace jnp1
 
 		if (strdeque_exists(id))
 		{
-			Strdeque& strdeque = strdeques[id];
+			Strdeque& strdeque = get_str_deque_map()[id];
 
 			if (pos < strdeque.size())
 			{
@@ -121,7 +129,7 @@ namespace jnp1
 
 		if (strdeque_exists(id))
 		{
-			strdeques[id].clear();
+			get_str_deque_map()[id].clear();
 		}
 	}
 
