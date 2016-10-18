@@ -10,20 +10,20 @@ namespace
 
 	typedef std::deque<std::string> Strdeque;
 
-	static Strdeque emptyStrdeque;
+	Strdeque emptyStrdeque;
 
-	static std::unordered_map<unsigned long, Strdeque> strdeques({{0, emptyStrdeque}});
+	std::unordered_map<unsigned long, Strdeque> strdeques({{0, emptyStrdeque}});
 
-	static unsigned long lastAddedId = 0;
+	unsigned long lastAddedId = 0;
 
-	bool strdeque_is_exist(unsigned long id)
+	bool strdeque_exists(unsigned long id)
 	{
 		return strdeques.count(id) > 0;
 	}
 
 	Strdeque& strdeque_get_from_id_or_empty(unsigned long id)
 	{
-		if (strdeque_is_exist(id))
+		if (strdeque_exists(id))
 		{
 			return strdeques[id];
 		}
@@ -34,16 +34,13 @@ namespace
 	}
 }
 
-namespace jnp1 
+namespace jnp1
 {
 	unsigned long strdeque_new()
 	{
 		std::cout << "DEBUG strdeque_new()\n";
 
-		Strdeque newStrdeque;
-
-		lastAddedId++;
-		strdeques[lastAddedId] = newStrdeque;
+		strdeques[++lastAddedId] = Strdeque();
 
 		return lastAddedId;
 	}
@@ -59,7 +56,7 @@ namespace jnp1
 	{
 		std::cout << "DEBUG strdeque_size("<<id<<")\n";
 
-		if (strdeque_is_exist(id))
+		if (strdeque_exists(id))
 		{
 			return strdeques[id].size();
 		}
@@ -71,7 +68,7 @@ namespace jnp1
 	{
 		std::cout << "DEBUG strdeque_insert_at("<<id<<", "<<pos<<", "<<value<<")\n";
 
-		if (strdeque_is_exist(id) && value != nullptr)
+		if (value != nullptr && strdeque_exists(id))
 		{
 			Strdeque& strdeque = strdeques[id];
 
@@ -90,9 +87,9 @@ namespace jnp1
 	{
 		std::cout << "DEBUG strdeque_remove_at("<<id<<", "<<pos<<")\n";
 
-		if (strdeque_is_exist(id))
+		if (strdeque_exists(id))
 		{
-			Strdeque& strdeque = strdeques.at(id);
+			Strdeque& strdeque = strdeques[id];
 
 			if (pos < strdeque.size())
 			{
@@ -105,7 +102,7 @@ namespace jnp1
 	{
 		std::cout << "DEBUG strdeque_get_at("<<id<<", "<<pos<<")\n";
 
-		if (strdeque_is_exist(id))
+		if (strdeque_exists(id))
 		{
 			Strdeque& strdeque = strdeques[id];
 
@@ -122,11 +119,9 @@ namespace jnp1
 	{
 		std::cout << "DEBUG strdeque_clear("<<id<<")\n";
 
-		if (strdeque_is_exist(id))
+		if (strdeque_exists(id))
 		{
-			Strdeque& strdeque = strdeques[id];
-
-			strdeque.clear();
+			strdeques[id].clear();
 		}
 	}
 
@@ -138,9 +133,9 @@ namespace jnp1
 		Strdeque& strdeque2 = strdeque_get_from_id_or_empty(id2);
 
 		int compareResult = 0;
-		unsigned long lesserSize = strdeque1.size() < strdeque2.size() ? strdeque1.size() : strdeque2.size();
+		size_t lesserSize = std::min(strdeque1.size(), strdeque2.size());
 
-		for (unsigned long i = 0; i < lesserSize && compareResult == 0; i++)
+		for (size_t i = 0; i < lesserSize && compareResult == 0; ++i)
 		{
 			compareResult = strdeque1[i].compare(strdeque2[i]);
 		}

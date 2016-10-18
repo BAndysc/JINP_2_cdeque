@@ -1,6 +1,7 @@
 #include <cassert>
 #include <cstddef>
 #include <cstring>
+#include <iostream>
 #include "cstrdeque"
 
 int streq(const char* s1, const char* s2, size_t len) {
