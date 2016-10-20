@@ -54,6 +54,7 @@ namespace jnp1
 {
 	StrDequeMapKey strdeque_new()
 	{
+		std::ios_base::Init();
 		std::cout << "DEBUG strdeque_new()\n";
 
 		get_str_deque_map()[++lastAddedId] = Strdeque();
@@ -63,6 +64,7 @@ namespace jnp1
 
 	void strdeque_delete(StrDequeMapKey id)
 	{
+		std::ios_base::Init();
 		std::cout << "DEBUG strdeque_delete("<<id<<")\n";
 
 		if (!strdeque_is_empty(id))
@@ -73,6 +75,7 @@ namespace jnp1
 
 	size_t strdeque_size(StrDequeMapKey id)
 	{
+		std::ios_base::Init();
 		std::cout << "DEBUG strdeque_size("<<id<<")\n";
 
 		if (strdeque_exists(id))
@@ -85,6 +88,7 @@ namespace jnp1
 
 	void strdeque_insert_at(StrDequeMapKey id, size_t pos, const char* value)
 	{
+		std::ios_base::Init();
 		std::cout << "DEBUG strdeque_insert_at("<<id<<", "<<pos<<", "<<value<<")\n";
 
 		if (value != nullptr && strdeque_exists(id) && !strdeque_is_empty(id))
@@ -104,6 +108,7 @@ namespace jnp1
 
 	void strdeque_remove_at(StrDequeMapKey id, size_t pos)
 	{
+		std::ios_base::Init();
 		std::cout << "DEBUG strdeque_remove_at("<<id<<", "<<pos<<")\n";
 
 		if (strdeque_exists(id))
@@ -119,6 +124,7 @@ namespace jnp1
 
 	const char* strdeque_get_at(StrDequeMapKey id, size_t pos)
 	{
+		std::ios_base::Init();
 		std::cout << "DEBUG strdeque_get_at("<<id<<", "<<pos<<")\n";
 
 		if (strdeque_exists(id))
@@ -136,6 +142,7 @@ namespace jnp1
 
 	void strdeque_clear(StrDequeMapKey id)
 	{
+		std::ios_base::Init();
 		std::cout << "DEBUG strdeque_clear("<<id<<")\n";
 
 		if (strdeque_exists(id) && !strdeque_is_empty(id))
@@ -146,6 +153,7 @@ namespace jnp1
 
 	int strdeque_comp(StrDequeMapKey id1, StrDequeMapKey id2)
 	{
+		std::ios_base::Init();
 		std::cout << "DEBUG strdeque_comp("<<id1<<", "<<id2<<")\n";
 
 		Strdeque& strdeque1 = strdeque_get_from_id_or_empty(id1);
