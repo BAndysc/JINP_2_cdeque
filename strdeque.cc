@@ -1,6 +1,7 @@
 #include <iostream>
 #include <deque>
 #include <unordered_map>
+#include "cstrdequeconst"
 #include "strdeque.h"
 #include "cstrdeque"
 
@@ -10,20 +11,20 @@ namespace
 	typedef std::deque<std::string> Strdeque;
 	typedef std::unordered_map<StrDequeMapKey, Strdeque> StrDequeMap;
 
-	const StrDequeMapKey EMPTY_STRDEQUE_ID = 0;
-	StrDequeMapKey lastAddedId = EMPTY_STRDEQUE_ID;
-
-
-	Strdeque& get_empty_strdeque()
-	{
-		static Strdeque empty;
-		return empty;
-	}
+	StrDequeMapKey lastAddedId = 0;
 
 	StrDequeMap& get_str_deque_map()
 	{
-		static StrDequeMap str_deque_map({{ EMPTY_STRDEQUE_ID, get_empty_strdeque() }});
+		static StrDequeMap str_deque_map;
+
 		return str_deque_map;
+	}
+
+	Strdeque& get_empty_strdeque()
+	{
+		static Strdeque& empty = get_str_deque_map()[jnp1::emptystrdeque()];
+
+		return empty;
 	}
 
 	bool strdeque_exists(StrDequeMapKey id)

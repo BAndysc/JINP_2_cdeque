@@ -1,10 +1,13 @@
 #include <iostream>
+#include "cstrdeque"
 #include "strdequeconst.h"
 #include "cstrdequeconst"
 
 unsigned long jnp1::emptystrdeque()
 {
-	return 0;
+	static long emptyStrdequeId = jnp1::strdeque_new();
+
+	return emptyStrdequeId;
 }
 
 unsigned long emptystrdeque()
