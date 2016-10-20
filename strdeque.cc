@@ -27,6 +27,11 @@ namespace
 		return empty;
 	}
 
+	bool strdeque_is_empty(StrDequeMapKey id)
+	{
+		return id == jnp1::emptystrdeque();
+	}
+
 	bool strdeque_exists(StrDequeMapKey id)
 	{
 		return get_str_deque_map().count(id) > 0;
@@ -60,7 +65,10 @@ namespace jnp1
 	{
 		std::cout << "DEBUG strdeque_delete("<<id<<")\n";
 
-		get_str_deque_map().erase(id);
+		if (!strdeque_is_empty(id))
+		{
+			get_str_deque_map().erase(id);
+		}
 	}
 
 	size_t strdeque_size(StrDequeMapKey id)
@@ -79,7 +87,7 @@ namespace jnp1
 	{
 		std::cout << "DEBUG strdeque_insert_at("<<id<<", "<<pos<<", "<<value<<")\n";
 
-		if (value != nullptr && strdeque_exists(id))
+		if (value != nullptr && strdeque_exists(id) && !strdeque_is_empty(id))
 		{
 			Strdeque& strdeque = get_str_deque_map()[id];
 
@@ -130,7 +138,7 @@ namespace jnp1
 	{
 		std::cout << "DEBUG strdeque_clear("<<id<<")\n";
 
-		if (strdeque_exists(id))
+		if (strdeque_exists(id) && !strdeque_is_empty(id))
 		{
 			get_str_deque_map()[id].clear();
 		}
