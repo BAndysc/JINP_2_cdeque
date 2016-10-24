@@ -2,9 +2,29 @@
 #include <deque>
 #include <unordered_map>
 #include <boost/format.hpp>
+#include <cassert>
 #include "cstrdequeconst"
 #include "strdeque.h"
 #include "cstrdeque"
+
+bool is_debug_mode()
+{
+	#ifdef NDEBUG
+		return false;
+	#else
+		return true;
+	#endif
+}
+
+void debug(std::string const& message)
+{
+	if (is_debug_mode())
+	{
+		std::ios_base::Init();
+		std::cerr << message << "\n";
+	}
+}
+
 
 namespace
 {
@@ -12,7 +32,7 @@ namespace
 	typedef std::deque<std::string> Strdeque;
 	typedef std::unordered_map<StrDequeMapKey, Strdeque> StrDequeMap;
 
-	StrDequeMapKey lastAddedId = 0;
+	StrDequeMapKey nextIdToUse = 0;
 
 	StrDequeMap& get_str_deque_map()
 	{
@@ -50,24 +70,6 @@ namespace
 		}
 	}
 
-	bool is_debug_mode()
-	{
-		#ifdef NDEBUG
-			return false;
-		#else
-			return true;
-		#endif
-	}
-
-	void debug(std::string const& message)
-	{
-		if (is_debug_mode())
-		{
-			std::ios_base::Init();
-			std::cerr << message << "\n";
-		}
-	}
-
 	std::string deque_to_string(StrDequeMapKey key)
 	{
 		static std::string the_empty_dequeue = "the Empty Deque";
@@ -85,11 +87,15 @@ namespace jnp1
 	{
 		debug("strdeque_new()");
 
-		get_str_deque_map()[++lastAddedId] = Strdeque();
+		assert(nextIdToUse < std::numeric_limits<StrDequeMapKey>::max());
 
-		debug((boost::format("strdeque_new: deque %1% created") % lastAddedId).str());
+		StrDequeMapKey key = nextIdToUse++;
 
-		return lastAddedId;
+		get_str_deque_map()[key] = Strdeque();
+
+		debug((boost::format("strdeque_new: deque %1% created") % key).str());
+
+		return key;
 	}
 
 	void strdeque_delete(StrDequeMapKey id)
