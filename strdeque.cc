@@ -101,13 +101,19 @@ namespace jnp1
 	{
 		debug((boost::format("strdeque_delete(%1%)") % deque_to_string(id)).str());
 
-		if (!strdeque_is_empty(id))
+		StrDequeMap::iterator itr = get_str_deque_map().find(id);
+
+		if (itr == get_str_deque_map().end())
 		{
-			get_str_deque_map().erase(id);
+			debug((boost::format("strdeque_delete: deque %1% doesn't exist") % id).str());
+		} 
+		else if (strdeque_is_empty(id))
+		{
+			debug("strdeque_delete: trying to delete empty dequeue");
 		}
 		else
 		{
-			debug("strdeque_delete: trying to delete empty dequeue");
+			get_str_deque_map().erase(itr);
 		}
 	}
 
@@ -115,13 +121,15 @@ namespace jnp1
 	{
 		debug((boost::format("strdeque_size(%1%)") % deque_to_string(id)).str());
 
-		if (strdeque_exists(id))
+		StrDequeMap::iterator itr = get_str_deque_map().find(id);
+
+		if (itr != get_str_deque_map().end())
 		{
-			return get_str_deque_map()[id].size();
+			return itr->second.size();
 		}
 		else
 		{
-			debug((boost::format("strdeque_size: deque %1% does not exist") % deque_to_string(id)).str());
+			debug((boost::format("strdeque_size: deque %1% does not exist") % id).str());
 		}
 
 		return 0;
@@ -135,28 +143,33 @@ namespace jnp1
 		{
 			debug("strdeque_insert_at: attempt to insert NULL into a deque");
 		}
-		else if (!strdeque_exists(id))
-		{
-			debug((boost::format("strdeque_insert_at: deque %1% does not exist") % id).str());
-		}
 		else if (strdeque_is_empty(id))
 		{
 			debug("strdeque_insert_at: attempt to insert into the Empty Deque");
 		}
 		else
 		{
-			Strdeque& strdeque = get_str_deque_map()[id];
+			StrDequeMap::iterator itr = get_str_deque_map().find(id);
 
-			if (pos < strdeque.size())
+			if (itr == get_str_deque_map().end())
 			{
-				strdeque.insert(strdeque.begin() + pos, value);
+				debug((boost::format("strdeque_insert_at: deque %1% does not exist") % id).str());
 			}
 			else
 			{
-				strdeque.push_back(value);
-				pos = strdeque.size();
+				Strdeque& strdeque = itr->second;
+
+				if (pos < strdeque.size())
+				{
+					strdeque.insert(strdeque.begin() + pos, value);
+				}
+				else
+				{
+					strdeque.push_back(value);
+					pos = strdeque.size();
+				}
+				debug((boost::format("strdeque_insert_at: deque %1%, element \"%2%\" inserted at %3%") % id % value % pos).str());
 			}
-			debug((boost::format("strdeque_insert_at: deque %1%, element \"%2%\" inserted at %3%") % id % value % pos).str());
 		}
 	}
 
@@ -164,17 +177,19 @@ namespace jnp1
 	{
 		debug((boost::format("strdeque_remove_at(%1%, %2%)") % deque_to_string(id) % pos).str());
 
+		StrDequeMap::iterator itr = get_str_deque_map().find(id);
+
 		if (strdeque_is_empty(id))
 		{
 			debug("strdeque_remove_at: attempt to remove from the Empty Deque");
 		}
-		else if (!strdeque_exists(id))
+		else if (itr == get_str_deque_map().end())
 		{
 			debug((boost::format("strdeque_remove_at: deque %1% does not exist") % id).str());
 		}
 		else
 		{
-			Strdeque& strdeque = get_str_deque_map()[id];
+			Strdeque& strdeque = itr->second;
 
 			if (pos < strdeque.size())
 			{
@@ -192,13 +207,15 @@ namespace jnp1
 	{
 		debug((boost::format("strdeque_get_at(%1%, %2%)") % deque_to_string(id) % pos).str());
 
-		if (!strdeque_exists(id))
+		StrDequeMap::iterator itr = get_str_deque_map().find(id);
+
+		if (itr == get_str_deque_map().end())
 		{
 			debug((boost::format("strdeque_get_at: deque %1% does not exist") % id).str());
 		}
 		else
 		{
-			Strdeque& strdeque = get_str_deque_map()[id];
+			Strdeque& strdeque = itr->second;
 
 			if (pos < strdeque.size())
 			{
@@ -218,7 +235,9 @@ namespace jnp1
 	{
 		debug((boost::format("strdeque_clear(%1%)") % deque_to_string(id)).str());
 
-		if (!strdeque_exists(id))
+		StrDequeMap::iterator itr = get_str_deque_map().find(id);
+
+		if (itr == get_str_deque_map().end())
 		{
 			debug((boost::format("strdeque_clear: deque %1% does not exist") % id).str());
 		}
@@ -228,7 +247,7 @@ namespace jnp1
 		}
 		else
 		{
-			get_str_deque_map()[id].clear();
+			itr->second.clear();
 		}
 	}
 
