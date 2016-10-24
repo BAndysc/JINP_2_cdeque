@@ -7,25 +7,6 @@
 #include "strdeque.h"
 #include "cstrdeque"
 
-bool is_debug_mode()
-{
-	#ifdef NDEBUG
-		return false;
-	#else
-		return true;
-	#endif
-}
-
-void debug(std::string const& message)
-{
-	if (is_debug_mode())
-	{
-		std::ios_base::Init();
-		std::cerr << message << "\n";
-	}
-}
-
-
 namespace
 {
 	typedef unsigned long StrDequeMapKey;
@@ -67,6 +48,24 @@ namespace
 		else
 		{
 			return get_empty_strdeque();
+		}
+	}
+
+	bool is_debug_mode()
+	{
+		#ifdef NDEBUG
+			return false;
+		#else
+			return true;
+		#endif
+	}
+
+	void debug(std::string const& message)
+	{
+		if (is_debug_mode())
+		{
+			std::ios_base::Init();
+			std::cerr << message << "\n";
 		}
 	}
 
