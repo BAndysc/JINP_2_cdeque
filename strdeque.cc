@@ -17,9 +17,9 @@ namespace
 
 	StrDequeMap& get_str_deque_map()
 	{
-		static StrDequeMap str_deque_map;
+		static StrDequeMap strDequeMap;
 
-		return str_deque_map;
+		return strDequeMap;
 	}
 
 	Strdeque& get_empty_strdeque()
@@ -64,18 +64,18 @@ namespace
 	{
 		if (is_debug_mode())
 		{
-			static std::ios_base::Init streamsInit;
-			
+			static const std::ios_base::Init streamsInit;
+
 			std::cerr << message << "\n";
 		}
 	}
 
 	std::string deque_to_string(StrDequeMapKey key)
 	{
-		static std::string the_empty_dequeue = "the Empty Deque";
+		static const std::string theEmptyDequeue = "the Empty Deque";
 
 		if (key == jnp1::emptystrdeque())
-			return the_empty_dequeue;
+			return theEmptyDequeue;
 
 		return std::to_string(key);
 	}
@@ -281,7 +281,6 @@ namespace jnp1
 		}
 
 		debug((boost::format("strdeque_comp: result of comparing deque %1% to deque %2% is %3%") % deque_to_string(id1) % deque_to_string(id2) % compareResult).str());
-
 
 		return compareResult;
 	}

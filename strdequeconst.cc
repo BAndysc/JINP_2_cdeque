@@ -5,6 +5,8 @@
 
 namespace
 {
+	typedef unsigned long StrDequeMapKey;
+
 	bool is_debug_mode()
 	{
 		#ifdef NDEBUG
@@ -18,22 +20,23 @@ namespace
 	{
 		if (is_debug_mode())
 		{
-			std::ios_base::Init();
+			static const std::ios_base::Init streamsInit;
+
 			std::cerr << message << "\n";
 		}
 	}
 }
 
-unsigned long jnp1::emptystrdeque()
+StrDequeMapKey jnp1::emptystrdeque()
 {
-	static long emptyStrdequeId = jnp1::strdeque_new();
+	static const StrDequeMapKey emptyStrdequeId = jnp1::strdeque_new();
 
 	debug("emptystrdeque()");
 
 	return emptyStrdequeId;
 }
 
-unsigned long emptystrdeque()
+StrDequeMapKey emptystrdeque()
 {
 	return jnp1::emptystrdeque();
 }
