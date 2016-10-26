@@ -75,9 +75,37 @@ namespace
 		static const std::string theEmptyDequeue = "the Empty Deque";
 
 		if (key == jnp1::emptystrdeque())
+		{
 			return theEmptyDequeue;
+		}
 
 		return std::to_string(key);
+	}
+
+	int strdeque_comp_calculate(Strdeque& strdeque1, Strdeque& strdeque2)
+	{
+		int compareResult = 0;
+		size_t lesserSize = std::min(strdeque1.size(), strdeque2.size());
+
+		for (size_t i = 0; i < lesserSize && compareResult == 0; ++i)
+		{
+			compareResult = strdeque1[i].compare(strdeque2[i]);
+		}
+
+		if (compareResult == 0 && strdeque1.size() != strdeque2.size())
+		{
+			compareResult = strdeque1.size() < strdeque2.size() ? -1 : 1;
+		}
+		else if (compareResult < -1)
+		{
+			compareResult = -1;
+		}
+		else if (compareResult > 1)
+		{
+			compareResult = 1;
+		}
+
+		return compareResult;
 	}
 }
 
@@ -169,7 +197,8 @@ namespace jnp1
 					strdeque.push_back(value);
 					pos = strdeque.size();
 				}
-				debug((boost::format("strdeque_insert_at: deque %1%, element \"%2%\" inserted at %3%") % id % value % pos).str());
+				debug((boost::format("strdeque_insert_at: deque %1%, element \"%2%\" inserted at %3%")
+					% id % value % pos).str());
 			}
 		}
 	}
@@ -195,11 +224,14 @@ namespace jnp1
 			if (pos < strdeque.size())
 			{
 				strdeque.erase(strdeque.begin() + pos);
-				debug((boost::format("strdeque_remove_at: deque %1% element at %2% removed") % id % pos).str());
+
+				debug((boost::format("strdeque_remove_at: deque %1% element at %2% removed")
+					% id % pos).str());
 			}
 			else
 			{
-				debug((boost::format("strdeque_remove_at: deque %1% does not contain an element at %2%") % id % pos).str());
+				debug((boost::format("strdeque_remove_at: deque %1% does not contain an element at %2%")
+					% id % pos).str());
 			}
 		}
 	}
@@ -220,12 +252,15 @@ namespace jnp1
 
 			if (pos < strdeque.size())
 			{
-				debug((boost::format("strdeque_get_at: deque %1%, element at %2% is \"%3%\"") % id % pos % strdeque[pos]).str());
+				debug((boost::format("strdeque_get_at: deque %1%, element at %2% is \"%3%\"")
+					% id % pos % strdeque[pos]).str());
+
 				return strdeque[pos].c_str();
 			}
 			else
 			{
-				debug((boost::format("strdeque_get_at: deque %1% does not contain an element at %2%") % deque_to_string(id) % pos).str());
+				debug((boost::format("strdeque_get_at: deque %1% does not contain an element at %2%")
+					% deque_to_string(id) % pos).str());
 			}
 		}
 
@@ -259,28 +294,10 @@ namespace jnp1
 		Strdeque& strdeque1 = strdeque_get_from_id_or_empty(id1);
 		Strdeque& strdeque2 = strdeque_get_from_id_or_empty(id2);
 
-		int compareResult = 0;
-		size_t lesserSize = std::min(strdeque1.size(), strdeque2.size());
+		int compareResult = strdeque_comp_calculate(strdeque1, strdeque2);
 
-		for (size_t i = 0; i < lesserSize && compareResult == 0; ++i)
-		{
-			compareResult = strdeque1[i].compare(strdeque2[i]);
-		}
-
-		if (compareResult == 0 && strdeque1.size() != strdeque2.size())
-		{
-			compareResult = strdeque1.size() < strdeque2.size() ? -1 : 1;
-		}
-		else if (compareResult < -1)
-		{
-			compareResult = -1;
-		}
-		else if (compareResult > 1)
-		{
-			compareResult = 1;
-		}
-
-		debug((boost::format("strdeque_comp: result of comparing deque %1% to deque %2% is %3%") % deque_to_string(id1) % deque_to_string(id2) % compareResult).str());
+		debug((boost::format("strdeque_comp: result of comparing deque %1% to deque %2% is %3%")
+			% deque_to_string(id1) % deque_to_string(id2) % compareResult).str());
 
 		return compareResult;
 	}
