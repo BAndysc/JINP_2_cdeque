@@ -1,6 +1,8 @@
 #ifndef CSTRDEQUE
 #define CSTRDEQUE
 
+#include <cstdio>
+
 namespace jnp1
 {
 	unsigned long strdeque_new();

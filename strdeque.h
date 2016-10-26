@@ -2,8 +2,12 @@
 #define STRDEQUE_H
 
 #ifdef __cplusplus
+  #include <cstdio>
+
   extern "C"
   {
+#else
+  #include <stdio.h>
 #endif
 
 unsigned long strdeque_new();

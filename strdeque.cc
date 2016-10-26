@@ -64,7 +64,8 @@ namespace
 	{
 		if (is_debug_mode())
 		{
-			std::ios_base::Init();
+			static std::ios_base::Init streamsInit;
+			
 			std::cerr << message << "\n";
 		}
 	}
@@ -106,7 +107,7 @@ namespace jnp1
 		if (itr == get_str_deque_map().end())
 		{
 			debug((boost::format("strdeque_delete: deque %1% doesn't exist") % id).str());
-		} 
+		}
 		else if (strdeque_is_empty(id))
 		{
 			debug("strdeque_delete: trying to delete empty dequeue");
