@@ -32,16 +32,12 @@ namespace
 	}
 }
 
-StrDequeMapKey jnp1::emptystrdeque()
-{
-	static const StrDequeMapKey emptyStrdequeId = jnp1::strdeque_new();
-
-	debug(DebugStrings::Empty);
-
-	return emptyStrdequeId;
-}
 
 StrDequeMapKey emptystrdeque()
 {
-	return jnp1::emptystrdeque();
+	static const StrDequeMapKey emptyStrdequeId = jnp1::strdeque_new();
+	
+	debug(DebugStrings::Empty);
+
+	return emptyStrdequeId;
 }

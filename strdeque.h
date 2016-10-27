@@ -2,7 +2,8 @@
 #define STRDEQUE_H
 
 #ifdef __cplusplus
-  #include <cstddef>
+ // uncomment to break the compilation >.<
+ // #include <cstddef>
 
   extern "C"
   {

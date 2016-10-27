@@ -150,8 +150,8 @@ namespace
 	}
 }
 
-namespace jnp1
-{
+//namespace jnp1
+//{
 	StrDequeMapKey strdeque_new()
 	{
 		debug(DebugStrings::NewDeque);
@@ -336,9 +336,8 @@ namespace jnp1
 
 		return compareResult;
 	}
-}
-
-
+//}
+/*
 StrDequeMapKey strdeque_new()
 {
 	return jnp1::strdeque_new();
@@ -378,3 +377,5 @@ int strdeque_comp(StrDequeMapKey id1, StrDequeMapKey id2)
 {
 	return jnp1::strdeque_comp(id1, id2);
 }
+
+*/
