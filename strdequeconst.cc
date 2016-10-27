@@ -5,6 +5,11 @@
 
 namespace
 {
+	namespace DebugStrings
+	{
+		const char* Empty = "emptystrdeque()";
+	}
+
 	typedef unsigned long StrDequeMapKey;
 
 	bool is_debug_mode()
@@ -31,7 +36,7 @@ StrDequeMapKey jnp1::emptystrdeque()
 {
 	static const StrDequeMapKey emptyStrdequeId = jnp1::strdeque_new();
 
-	debug("emptystrdeque()");
+	debug(DebugStrings::Empty);
 
 	return emptyStrdequeId;
 }

@@ -9,6 +9,47 @@
 
 namespace
 {
+	namespace DebugStrings
+	{
+		const char* NewDeque = "strdeque_new()";
+		const char* DequeCreated = "strdeque_new: deque %1% created";
+		const char* DeleteDeque = "strdeque_delete(%1%)";
+		const char* DeleteDequeDoesnotExist = "strdeque_delete: deque %1% doesn't exist";
+		const char* DeleteDequeEmpty = "strdeque_delete: trying to delete empty dequeue";
+		const char* DequeSizeFunc = "strdeque_size(%1%)";
+		const char* DequeInsertAtFunc = "strdeque_insert_at(%1%, %2%, \"%3%\")";
+		const char* RemoveFunc = "strdeque_remove_at(%1%, %2%)";
+
+		const char* DequeDoesnotExist = "%1%: deque %2% does not exist";
+
+		const char* DequeSize = "strdeque_size";
+		const char* DequeInsertAt = "strdeque_insert_at";
+		const char* Remove = "strdeque_remove_at";
+		const char* GetAt = "strdeque_get_at";
+		const char* Clear = "strdeque_clear";
+
+		const char* InsertAtNull = "strdeque_insert_at: attempt to insert NULL into a deque";
+		const char* InsertIntoEmpty = "strdeque_insert_at: attempt to insert into the Empty Deque";
+		const char* Inserted = "strdeque_insert_at: deque %1%, element \"%2%\" inserted at %3%";
+
+		const char* RemoveEmpty = "strdeque_remove_at: attempt to remove from the Empty Deque";
+		const char* ElementRemoved = "strdeque_remove_at: deque %1% element at %2% removed";
+		const char* RemoveNoIndex = "strdeque_remove_at: deque %1% does not contain an element at %2%";
+
+		const char* DequeGetAtFunc = "strdeque_get_at(%1%, %2%)";
+		const char* GetAtResult = "strdeque_get_at: deque %1%, element at %2% is \"%3%\"";
+		const char* GetAtNoElement = "strdeque_get_at: deque %1% does not contain an element at %2%";
+
+
+		const char* ClearDequeFunc = "strdeque_clear(%1%)";
+		const char* ClearEmptyDeque = "strdeque_clear: attempt to clear the Empty Deque";
+
+		const char* CompareDequesFunc = "strdeque_comp(%1%, %2%)";
+		const char* CompareResult = "strdeque_comp: result of comparing deque %1% to deque %2% is %3%";
+	
+		const char* TheEmptyDeque = "the Empty Deque";
+	};
+
 	typedef unsigned long StrDequeMapKey;
 	typedef std::deque<std::string> Strdeque;
 	typedef std::unordered_map<StrDequeMapKey, Strdeque> StrDequeMap;
@@ -72,7 +113,7 @@ namespace
 
 	std::string deque_to_string(StrDequeMapKey key)
 	{
-		static const std::string theEmptyDequeue = "the Empty Deque";
+		static const std::string theEmptyDequeue(DebugStrings::TheEmptyDeque);
 
 		if (key == jnp1::emptystrdeque())
 		{
@@ -113,7 +154,7 @@ namespace jnp1
 {
 	StrDequeMapKey strdeque_new()
 	{
-		debug("strdeque_new()");
+		debug(DebugStrings::NewDeque);
 
 		assert(nextIdToUse < std::numeric_limits<StrDequeMapKey>::max());
 
@@ -121,24 +162,24 @@ namespace jnp1
 
 		get_str_deque_map()[key] = Strdeque();
 
-		debug((boost::format("strdeque_new: deque %1% created") % key).str());
+		debug((boost::format(DebugStrings::DequeCreated) % key).str());
 
 		return key;
 	}
 
 	void strdeque_delete(StrDequeMapKey id)
 	{
-		debug((boost::format("strdeque_delete(%1%)") % deque_to_string(id)).str());
+		debug((boost::format(DebugStrings::DeleteDeque) % deque_to_string(id)).str());
 
 		StrDequeMap::iterator itr = get_str_deque_map().find(id);
 
 		if (itr == get_str_deque_map().end())
 		{
-			debug((boost::format("strdeque_delete: deque %1% doesn't exist") % id).str());
+			debug((boost::format(DebugStrings::DeleteDequeDoesnotExist) % id).str());
 		}
 		else if (strdeque_is_empty(id))
 		{
-			debug("strdeque_delete: trying to delete empty dequeue");
+			debug(DebugStrings::DeleteDequeEmpty);
 		}
 		else
 		{
@@ -148,7 +189,7 @@ namespace jnp1
 
 	size_t strdeque_size(StrDequeMapKey id)
 	{
-		debug((boost::format("strdeque_size(%1%)") % deque_to_string(id)).str());
+		debug((boost::format(DebugStrings::DequeSizeFunc) % deque_to_string(id)).str());
 
 		StrDequeMap::iterator itr = get_str_deque_map().find(id);
 
@@ -158,7 +199,7 @@ namespace jnp1
 		}
 		else
 		{
-			debug((boost::format("strdeque_size: deque %1% does not exist") % id).str());
+			debug((boost::format(DebugStrings::DequeDoesnotExist) % DebugStrings::DequeSize % id).str());
 		}
 
 		return 0;
@@ -166,15 +207,15 @@ namespace jnp1
 
 	void strdeque_insert_at(StrDequeMapKey id, size_t pos, const char* value)
 	{
-		debug((boost::format("strdeque_insert_at(%1%, %2%, \"%3%\")") % deque_to_string(id) % pos % value).str());
+		debug((boost::format(DebugStrings::DequeInsertAtFunc) % deque_to_string(id) % pos % value).str());
 
 		if (value == nullptr)
 		{
-			debug("strdeque_insert_at: attempt to insert NULL into a deque");
+			debug(DebugStrings::InsertAtNull);
 		}
 		else if (strdeque_is_empty(id))
 		{
-			debug("strdeque_insert_at: attempt to insert into the Empty Deque");
+			debug(DebugStrings::InsertIntoEmpty);
 		}
 		else
 		{
@@ -182,7 +223,7 @@ namespace jnp1
 
 			if (itr == get_str_deque_map().end())
 			{
-				debug((boost::format("strdeque_insert_at: deque %1% does not exist") % id).str());
+				debug((boost::format(DebugStrings::DequeDoesnotExist) % DebugStrings::DequeInsertAt % id).str());
 			}
 			else
 			{
@@ -197,25 +238,24 @@ namespace jnp1
 					strdeque.push_back(value);
 					pos = strdeque.size();
 				}
-				debug((boost::format("strdeque_insert_at: deque %1%, element \"%2%\" inserted at %3%")
-					% id % value % pos).str());
+				debug((boost::format(DebugStrings::Inserted) % id % value % pos).str());
 			}
 		}
 	}
 
 	void strdeque_remove_at(StrDequeMapKey id, size_t pos)
 	{
-		debug((boost::format("strdeque_remove_at(%1%, %2%)") % deque_to_string(id) % pos).str());
+		debug((boost::format(DebugStrings::RemoveFunc) % deque_to_string(id) % pos).str());
 
 		StrDequeMap::iterator itr = get_str_deque_map().find(id);
 
 		if (strdeque_is_empty(id))
 		{
-			debug("strdeque_remove_at: attempt to remove from the Empty Deque");
+			debug(DebugStrings::RemoveEmpty);
 		}
 		else if (itr == get_str_deque_map().end())
 		{
-			debug((boost::format("strdeque_remove_at: deque %1% does not exist") % id).str());
+			debug((boost::format(DebugStrings::DequeDoesnotExist) % DebugStrings::Remove % id).str());
 		}
 		else
 		{
@@ -225,26 +265,24 @@ namespace jnp1
 			{
 				strdeque.erase(strdeque.begin() + pos);
 
-				debug((boost::format("strdeque_remove_at: deque %1% element at %2% removed")
-					% id % pos).str());
+				debug((boost::format(DebugStrings::ElementRemoved) % id % pos).str());
 			}
 			else
 			{
-				debug((boost::format("strdeque_remove_at: deque %1% does not contain an element at %2%")
-					% id % pos).str());
+				debug((boost::format(DebugStrings::RemoveNoIndex) % id % pos).str());
 			}
 		}
 	}
 
 	const char* strdeque_get_at(StrDequeMapKey id, size_t pos)
 	{
-		debug((boost::format("strdeque_get_at(%1%, %2%)") % deque_to_string(id) % pos).str());
+		debug((boost::format(DebugStrings::DequeGetAtFunc) % deque_to_string(id) % pos).str());
 
 		StrDequeMap::iterator itr = get_str_deque_map().find(id);
 
 		if (itr == get_str_deque_map().end())
 		{
-			debug((boost::format("strdeque_get_at: deque %1% does not exist") % id).str());
+			debug((boost::format(DebugStrings::DequeDoesnotExist) % DebugStrings::GetAt % id).str());
 		}
 		else
 		{
@@ -252,15 +290,13 @@ namespace jnp1
 
 			if (pos < strdeque.size())
 			{
-				debug((boost::format("strdeque_get_at: deque %1%, element at %2% is \"%3%\"")
-					% id % pos % strdeque[pos]).str());
+				debug((boost::format(DebugStrings::GetAtResult) % id % pos % strdeque[pos]).str());
 
 				return strdeque[pos].c_str();
 			}
 			else
 			{
-				debug((boost::format("strdeque_get_at: deque %1% does not contain an element at %2%")
-					% deque_to_string(id) % pos).str());
+				debug((boost::format(DebugStrings::GetAtNoElement) % deque_to_string(id) % pos).str());
 			}
 		}
 
@@ -269,17 +305,17 @@ namespace jnp1
 
 	void strdeque_clear(StrDequeMapKey id)
 	{
-		debug((boost::format("strdeque_clear(%1%)") % deque_to_string(id)).str());
+		debug((boost::format(DebugStrings::ClearDequeFunc) % deque_to_string(id)).str());
 
 		StrDequeMap::iterator itr = get_str_deque_map().find(id);
 
 		if (itr == get_str_deque_map().end())
 		{
-			debug((boost::format("strdeque_clear: deque %1% does not exist") % id).str());
+			debug((boost::format(DebugStrings::DequeDoesnotExist) % DebugStrings::Clear % id).str());
 		}
 		else if (strdeque_is_empty(id))
 		{
-			debug("strdeque_clear: attempt to clear the Empty Deque");
+			debug(DebugStrings::ClearEmptyDeque);
 		}
 		else
 		{
@@ -289,19 +325,19 @@ namespace jnp1
 
 	int strdeque_comp(StrDequeMapKey id1, StrDequeMapKey id2)
 	{
-		debug((boost::format("strdeque_comp(%1%, %2%)") % deque_to_string(id1) % deque_to_string(id2)).str());
+		debug((boost::format(DebugStrings::CompareDequesFunc) % deque_to_string(id1) % deque_to_string(id2)).str());
 
 		Strdeque& strdeque1 = strdeque_get_from_id_or_empty(id1);
 		Strdeque& strdeque2 = strdeque_get_from_id_or_empty(id2);
 
 		int compareResult = strdeque_comp_calculate(strdeque1, strdeque2);
 
-		debug((boost::format("strdeque_comp: result of comparing deque %1% to deque %2% is %3%")
-			% deque_to_string(id1) % deque_to_string(id2) % compareResult).str());
+		debug((boost::format(DebugStrings::CompareResult) % deque_to_string(id1) % deque_to_string(id2) % compareResult).str());
 
 		return compareResult;
 	}
 }
+
 
 StrDequeMapKey strdeque_new()
 {
