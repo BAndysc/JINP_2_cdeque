@@ -3,7 +3,7 @@
 
 #ifdef __cplusplus
  // uncomment to break the compilation >.<
- // #include <cstddef>
+  #include <cstddef>
 
   extern "C"
   {
