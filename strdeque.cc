@@ -1,5 +1,4 @@
 #include <cstddef>
-#include <iostream>
 #include <deque>
 #include <unordered_map>
 #include <boost/format.hpp>
@@ -151,232 +150,187 @@ namespace
 	}
 }
 
-//namespace jnp1
-//{
-	StrDequeMapKey strdeque_new()
-	{
-		debug(DebugStrings::NewDeque);
-
-		assert(nextIdToUse < std::numeric_limits<StrDequeMapKey>::max());
-
-		StrDequeMapKey key = nextIdToUse++;
-
-		get_str_deque_map()[key] = Strdeque();
-
-		debug((boost::format(DebugStrings::DequeCreated) % key).str());
-
-		return key;
-	}
-
-	void strdeque_delete(StrDequeMapKey id)
-	{
-		debug((boost::format(DebugStrings::DeleteDeque) % deque_to_string(id)).str());
-
-		StrDequeMap::iterator itr = get_str_deque_map().find(id);
-
-		if (itr == get_str_deque_map().end())
-		{
-			debug((boost::format(DebugStrings::DeleteDequeDoesnotExist) % id).str());
-		}
-		else if (strdeque_is_empty(id))
-		{
-			debug(DebugStrings::DeleteDequeEmpty);
-		}
-		else
-		{
-			get_str_deque_map().erase(itr);
-		}
-	}
-
-	size_t strdeque_size(StrDequeMapKey id)
-	{
-		debug((boost::format(DebugStrings::DequeSizeFunc) % deque_to_string(id)).str());
-
-		StrDequeMap::iterator itr = get_str_deque_map().find(id);
-
-		if (itr != get_str_deque_map().end())
-		{
-			return itr->second.size();
-		}
-		else
-		{
-			debug((boost::format(DebugStrings::DequeDoesnotExist) % DebugStrings::DequeSize % id).str());
-		}
-
-		return 0;
-	}
-
-	void strdeque_insert_at(StrDequeMapKey id, size_t pos, const char* value)
-	{
-		debug((boost::format(DebugStrings::DequeInsertAtFunc) % deque_to_string(id) % pos % value).str());
-
-		if (value == nullptr)
-		{
-			debug(DebugStrings::InsertAtNull);
-		}
-		else if (strdeque_is_empty(id))
-		{
-			debug(DebugStrings::InsertIntoEmpty);
-		}
-		else
-		{
-			StrDequeMap::iterator itr = get_str_deque_map().find(id);
-
-			if (itr == get_str_deque_map().end())
-			{
-				debug((boost::format(DebugStrings::DequeDoesnotExist) % DebugStrings::DequeInsertAt % id).str());
-			}
-			else
-			{
-				Strdeque& strdeque = itr->second;
-
-				if (pos < strdeque.size())
-				{
-					strdeque.insert(strdeque.begin() + pos, value);
-				}
-				else
-				{
-					strdeque.push_back(value);
-					pos = strdeque.size();
-				}
-				debug((boost::format(DebugStrings::Inserted) % id % value % pos).str());
-			}
-		}
-	}
-
-	void strdeque_remove_at(StrDequeMapKey id, size_t pos)
-	{
-		debug((boost::format(DebugStrings::RemoveFunc) % deque_to_string(id) % pos).str());
-
-		StrDequeMap::iterator itr = get_str_deque_map().find(id);
-
-		if (strdeque_is_empty(id))
-		{
-			debug(DebugStrings::RemoveEmpty);
-		}
-		else if (itr == get_str_deque_map().end())
-		{
-			debug((boost::format(DebugStrings::DequeDoesnotExist) % DebugStrings::Remove % id).str());
-		}
-		else
-		{
-			Strdeque& strdeque = itr->second;
-
-			if (pos < strdeque.size())
-			{
-				strdeque.erase(strdeque.begin() + pos);
-
-				debug((boost::format(DebugStrings::ElementRemoved) % id % pos).str());
-			}
-			else
-			{
-				debug((boost::format(DebugStrings::RemoveNoIndex) % id % pos).str());
-			}
-		}
-	}
-
-	const char* strdeque_get_at(StrDequeMapKey id, size_t pos)
-	{
-		debug((boost::format(DebugStrings::DequeGetAtFunc) % deque_to_string(id) % pos).str());
-
-		StrDequeMap::iterator itr = get_str_deque_map().find(id);
-
-		if (itr == get_str_deque_map().end())
-		{
-			debug((boost::format(DebugStrings::DequeDoesnotExist) % DebugStrings::GetAt % id).str());
-		}
-		else
-		{
-			Strdeque& strdeque = itr->second;
-
-			if (pos < strdeque.size())
-			{
-				debug((boost::format(DebugStrings::GetAtResult) % id % pos % strdeque[pos]).str());
-
-				return strdeque[pos].c_str();
-			}
-			else
-			{
-				debug((boost::format(DebugStrings::GetAtNoElement) % deque_to_string(id) % pos).str());
-			}
-		}
-
-		return nullptr;
-	}
-
-	void strdeque_clear(StrDequeMapKey id)
-	{
-		debug((boost::format(DebugStrings::ClearDequeFunc) % deque_to_string(id)).str());
-
-		StrDequeMap::iterator itr = get_str_deque_map().find(id);
-
-		if (itr == get_str_deque_map().end())
-		{
-			debug((boost::format(DebugStrings::DequeDoesnotExist) % DebugStrings::Clear % id).str());
-		}
-		else if (strdeque_is_empty(id))
-		{
-			debug(DebugStrings::ClearEmptyDeque);
-		}
-		else
-		{
-			itr->second.clear();
-		}
-	}
-
-	int strdeque_comp(StrDequeMapKey id1, StrDequeMapKey id2)
-	{
-		debug((boost::format(DebugStrings::CompareDequesFunc) % deque_to_string(id1) % deque_to_string(id2)).str());
-
-		Strdeque& strdeque1 = strdeque_get_from_id_or_empty(id1);
-		Strdeque& strdeque2 = strdeque_get_from_id_or_empty(id2);
-
-		int compareResult = strdeque_comp_calculate(strdeque1, strdeque2);
-
-		debug((boost::format(DebugStrings::CompareResult) % deque_to_string(id1) % deque_to_string(id2) % compareResult).str());
-
-		return compareResult;
-	}
-//}
-/*
 StrDequeMapKey strdeque_new()
 {
-	return jnp1::strdeque_new();
+	debug(DebugStrings::NewDeque);
+
+	assert(nextIdToUse < std::numeric_limits<StrDequeMapKey>::max());
+
+	StrDequeMapKey key = nextIdToUse++;
+
+	get_str_deque_map()[key] = Strdeque();
+
+	debug((boost::format(DebugStrings::DequeCreated) % key).str());
+
+	return key;
 }
 
 void strdeque_delete(StrDequeMapKey id)
 {
-	jnp1::strdeque_delete(id);
+	debug((boost::format(DebugStrings::DeleteDeque) % deque_to_string(id)).str());
+
+	StrDequeMap::iterator itr = get_str_deque_map().find(id);
+
+	if (itr == get_str_deque_map().end())
+	{
+		debug((boost::format(DebugStrings::DeleteDequeDoesnotExist) % id).str());
+	}
+	else if (strdeque_is_empty(id))
+	{
+		debug(DebugStrings::DeleteDequeEmpty);
+	}
+	else
+	{
+		get_str_deque_map().erase(itr);
+	}
 }
 
 size_t strdeque_size(StrDequeMapKey id)
 {
-	return jnp1::strdeque_size(id);
+	debug((boost::format(DebugStrings::DequeSizeFunc) % deque_to_string(id)).str());
+
+	StrDequeMap::iterator itr = get_str_deque_map().find(id);
+
+	if (itr != get_str_deque_map().end())
+	{
+		return itr->second.size();
+	}
+	else
+	{
+		debug((boost::format(DebugStrings::DequeDoesnotExist) % DebugStrings::DequeSize % id).str());
+	}
+
+	return 0;
 }
 
 void strdeque_insert_at(StrDequeMapKey id, size_t pos, const char* value)
 {
-	jnp1::strdeque_insert_at(id, pos, value);
+	debug((boost::format(DebugStrings::DequeInsertAtFunc) % deque_to_string(id) % pos % value).str());
+
+	if (value == nullptr)
+	{
+		debug(DebugStrings::InsertAtNull);
+	}
+	else if (strdeque_is_empty(id))
+	{
+		debug(DebugStrings::InsertIntoEmpty);
+	}
+	else
+	{
+		StrDequeMap::iterator itr = get_str_deque_map().find(id);
+
+		if (itr == get_str_deque_map().end())
+		{
+			debug((boost::format(DebugStrings::DequeDoesnotExist) % DebugStrings::DequeInsertAt % id).str());
+		}
+		else
+		{
+			Strdeque& strdeque = itr->second;
+
+			if (pos < strdeque.size())
+			{
+				strdeque.insert(strdeque.begin() + pos, value);
+			}
+			else
+			{
+				strdeque.push_back(value);
+				pos = strdeque.size();
+			}
+			debug((boost::format(DebugStrings::Inserted) % id % value % pos).str());
+		}
+	}
 }
 
 void strdeque_remove_at(StrDequeMapKey id, size_t pos)
 {
-	jnp1::strdeque_remove_at(id, pos);
+	debug((boost::format(DebugStrings::RemoveFunc) % deque_to_string(id) % pos).str());
+
+	StrDequeMap::iterator itr = get_str_deque_map().find(id);
+
+	if (strdeque_is_empty(id))
+	{
+		debug(DebugStrings::RemoveEmpty);
+	}
+	else if (itr == get_str_deque_map().end())
+	{
+		debug((boost::format(DebugStrings::DequeDoesnotExist) % DebugStrings::Remove % id).str());
+	}
+	else
+	{
+		Strdeque& strdeque = itr->second;
+
+		if (pos < strdeque.size())
+		{
+			strdeque.erase(strdeque.begin() + pos);
+
+			debug((boost::format(DebugStrings::ElementRemoved) % id % pos).str());
+		}
+		else
+		{
+			debug((boost::format(DebugStrings::RemoveNoIndex) % id % pos).str());
+		}
+	}
 }
 
 const char* strdeque_get_at(StrDequeMapKey id, size_t pos)
 {
-	return jnp1::strdeque_get_at(id, pos);
+	debug((boost::format(DebugStrings::DequeGetAtFunc) % deque_to_string(id) % pos).str());
+
+	StrDequeMap::iterator itr = get_str_deque_map().find(id);
+
+	if (itr == get_str_deque_map().end())
+	{
+		debug((boost::format(DebugStrings::DequeDoesnotExist) % DebugStrings::GetAt % id).str());
+	}
+	else
+	{
+		Strdeque& strdeque = itr->second;
+
+		if (pos < strdeque.size())
+		{
+			debug((boost::format(DebugStrings::GetAtResult) % id % pos % strdeque[pos]).str());
+
+			return strdeque[pos].c_str();
+		}
+		else
+		{
+			debug((boost::format(DebugStrings::GetAtNoElement) % deque_to_string(id) % pos).str());
+		}
+	}
+
+	return nullptr;
 }
 
 void strdeque_clear(StrDequeMapKey id)
 {
-	jnp1::strdeque_clear(id);
+	debug((boost::format(DebugStrings::ClearDequeFunc) % deque_to_string(id)).str());
+
+	StrDequeMap::iterator itr = get_str_deque_map().find(id);
+
+	if (itr == get_str_deque_map().end())
+	{
+		debug((boost::format(DebugStrings::DequeDoesnotExist) % DebugStrings::Clear % id).str());
+	}
+	else if (strdeque_is_empty(id))
+	{
+		debug(DebugStrings::ClearEmptyDeque);
+	}
+	else
+	{
+		itr->second.clear();
+	}
 }
 
 int strdeque_comp(StrDequeMapKey id1, StrDequeMapKey id2)
 {
-	return jnp1::strdeque_comp(id1, id2);
-}
+	debug((boost::format(DebugStrings::CompareDequesFunc) % deque_to_string(id1) % deque_to_string(id2)).str());
 
-*/
+	Strdeque& strdeque1 = strdeque_get_from_id_or_empty(id1);
+	Strdeque& strdeque2 = strdeque_get_from_id_or_empty(id2);
+
+	int compareResult = strdeque_comp_calculate(strdeque1, strdeque2);
+
+	debug((boost::format(DebugStrings::CompareResult) % deque_to_string(id1) % deque_to_string(id2) % compareResult).str());
+
+	return compareResult;
+}

@@ -1,6 +1,7 @@
 #include <cassert>
 #include <cstdio>
 #include <climits>
+#include <iostream>
 #include "string.h"
 #include "cstrdeque"
 #include "cstrdequeconst"
@@ -79,7 +80,7 @@ int main() {
 
     jnp1::strdeque_clear(jnp1::emptystrdeque());
 
-    std::cout << emptystrdeque();
+    //std::cout << emptystrdeque();
 
     return 0;
 }
