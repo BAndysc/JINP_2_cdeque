@@ -91,7 +91,7 @@ namespace
 		}
 	}
 
-	bool is_debug_mode()
+	inline bool is_debug_mode()
 	{
 		#ifdef NDEBUG
 			return false;
