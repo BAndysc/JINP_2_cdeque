@@ -1,6 +1,5 @@
 #include <iostream>
 #include "cstrdeque"
-#include "strdequeconst.h"
 #include "cstrdequeconst"
 
 namespace
@@ -32,12 +31,14 @@ namespace
 	}
 }
 
-
-StrDequeMapKey emptystrdeque()
+namespace jnp1 
 {
-	static const StrDequeMapKey emptyStrdequeId = jnp1::strdeque_new();
-	
-	debug(DebugStrings::Empty);
+	StrDequeMapKey emptystrdeque()
+	{
+		static const StrDequeMapKey emptyStrdequeId = jnp1::strdeque_new();
+		
+		debug(DebugStrings::Empty);
 
-	return emptyStrdequeId;
+		return emptyStrdequeId;
+	}
 }

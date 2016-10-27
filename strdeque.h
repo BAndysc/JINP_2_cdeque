@@ -6,6 +6,8 @@
 
   extern "C"
   {
+    namespace jnp1
+    {
 #else
   #include <stddef.h>
 #endif
@@ -20,6 +22,7 @@ void strdeque_clear(unsigned long id);
 int strdeque_comp(unsigned long id1, unsigned long id2);
 
 #ifdef __cplusplus
+    }
   }
 #endif
 

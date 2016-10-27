@@ -1,9 +1,1 @@
-#ifndef CSTRDEQUE
-#define CSTRDEQUE
-#include <cstddef>
-namespace jnp1
-{
-	#include "strdeque.h"
-}
-
-#endif
+#include "strdeque.h"
