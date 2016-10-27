@@ -79,7 +79,7 @@ int main() {
 
     jnp1::strdeque_clear(jnp1::emptystrdeque());
 
-    //    std::cout << emptystrdeque();
+    std::cout << emptystrdeque();
 
     return 0;
 }
